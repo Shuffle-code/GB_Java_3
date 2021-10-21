@@ -20,16 +20,9 @@ public class CanDoTest {
 
         Constructor<TestClass> constructor = testClassClass.getDeclaredConstructor();
         System.out.println(constructor);
-//
-////        Class<Object> constructor;
-//        Object obj = constructor.newInstance();
 
-        Object obj = null;
-        try {
-            obj = testClass.getDeclaredConstructor().newInstance();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        }
+
+        Object object = testClass.getDeclaredConstructor().newInstance();
 
 
         for (Method m : testClass.getDeclaredMethods()) {
@@ -49,6 +42,22 @@ public class CanDoTest {
                 }
             }
         }
+        System.out.println("Object created in \"getDeclaredConstructor().newInstance()\"");
+
+        if (beforeMethod != null) {
+            beforeMethod.invoke(object);
+        }
+
+        testMethods.sort(Comparator.comparingInt(o -> o.getAnnotation(Test.class).priority()));
+        for (Method m : testMethods) {
+            m.invoke(object);
+        }
+
+        if (afterMethod != null) {
+            afterMethod.invoke(object);
+        }
+
+        System.out.println("Объект создан через \"new\", Object created in \"new\"");
 
 
         if (beforeMethod != null) {
